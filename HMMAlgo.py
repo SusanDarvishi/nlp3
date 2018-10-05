@@ -37,35 +37,40 @@ B = [[None for y in range(numUniqueWords)] for x in range(numUniquePOS)]
 for i in range(numUniquePOS):
 	A[i][0] = 0
 
-positionOfStart = totalPOS.get("start")
-A[0][positionOfStart] = 1
+positionOfStart = totalPOS.index("start")
+A[positionOfStart][0] = 1
 
-embed()
+#embed()
 
 #this next set of for loops will fill out both array A and array B
 #array A will hold the probabilities for each circumstance, and B will hold the backtrack path
 
-previousPOS = ["start"]
+previous = ["start"]
+tempPrevious = []
 
 #look at each word
 for word in totalWords:
+	probsForThisPosition = []
+
 	#look at all of the parts of speech that can apply to that word
 	for pos in wordDict.get(word):
-		
+		tempPrevious.append(pos)
+
 		#look at the probability that each part of speech follows the previous parts of speech
-
-
-
-
-
-
-
-
-
-
-
-
-
+		probFollowingPrevPos = 0
+		for prevpos in previous:
+			#here we will look at each pos that may preceed the pos of the word we're looking at
+			followingProbabilities = posDict.get(pos).previousPOS
+			print followingProbabilities
+			probFollowingPrevPos = followingProbabilities.get(prevpos)
+			# print pos
+			# print prevpos
+			# print probFollowingPrevPos
+		
+		#now we have the probability that the pos we're looking at follows one of the previous pos
+		#now we want to multiply that by the probability that the pos is a given word
+		
+	tempPreviousPOS = []
 
 
 
