@@ -45,32 +45,48 @@ A[positionOfStart][0] = 1
 #this next set of for loops will fill out both array A and array B
 #array A will hold the probabilities for each circumstance, and B will hold the backtrack path
 
-previous = ["start"]
-tempPrevious = []
+lastGeneratedPOS = ["start"]
+lastGeneratedProb = [1]
+tempLastGeneratedPos = []
+tempLastGeneratedProb = []
 
 #look at each word
 for word in totalWords:
-	probsForThisPosition = []
-
+	print "word ", word
 	#look at all of the parts of speech that can apply to that word
+	probWordAndFollowing = 0.0
 	for pos in wordDict.get(word):
+		probsForThisPosition = []
 		tempPrevious.append(pos)
+		print "pos ", pos
 
 		#look at the probability that each part of speech follows the previous parts of speech
-		probFollowingPrevPos = 0
+		probFollowingPrevPos = 0.0
 		for prevpos in previous:
-			#here we will look at each pos that may preceed the pos of the word we're looking at
+			print "prevpos ", prevpos
+			#here we will look at each prev pos that may preceed the pos of the word we're looking at
 			followingProbabilities = posDict.get(pos).previousPOS
-			print followingProbabilities
-			probFollowingPrevPos = followingProbabilities.get(prevpos)
+			#print followingProbabilities
+			probFollowingPrevPos = float(followingProbabilities.get(prevpos))
 			# print pos
 			# print prevpos
-			# print probFollowingPrevPos
+			print "probFollowingPrevPos ", probFollowingPrevPos
 		
 		#now we have the probability that the pos we're looking at follows one of the previous pos
 		#now we want to multiply that by the probability that the pos is a given word
-		
-	tempPreviousPOS = []
+		wordOccurances = wordDict.get(word).get(pos)
+		totalOccurances = posDict.get(pos).numOccurances
+		probPOSIsWord = float(wordOccurances)/float(totalOccurances)
+		# print wordOccurances
+		# print totalOccurances
+		print "probPOSISWord ", probPOSIsWord
+		probWordAndFollowing = float(probPOSIsWord * probFollowingPrevPos)
+
+	#now we have the probability that the POS is the given word times the probability that the POS follows the previous POS
+	#now we want to figure out what that probability is combined with the previous probabilities we've found
+
+	tempLastGeneratedPOS = []
+	tempLastGeneratedProb = []
 
 
 
