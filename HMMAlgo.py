@@ -45,29 +45,26 @@ A[positionOfStart][0] = 1
 #this next set of for loops will fill out both array A and array B
 #array A will hold the probabilities for each circumstance, and B will hold the backtrack path
 
-lastGeneratedPOS = ["start"]
-lastGeneratedProb = [1]
-tempLastGeneratedPos = []
-tempLastGeneratedProb = []
+lastGenerated = {"start":1}
+tempLastGenerated = {}
 
 #look at each word
 for word in totalWords:
 	print "word ", word
 	#look at all of the parts of speech that can apply to that word
 	probWordAndFollowing = 0.0
+	probForEachPOSOfWord = {}
 	for pos in wordDict.get(word):
-		probsForThisPosition = []
-		tempPrevious.append(pos)
 		print "pos ", pos
 
 		#look at the probability that each part of speech follows the previous parts of speech
 		probFollowingPrevPos = 0.0
-		for prevpos in previous:
-			print "prevpos ", prevpos
+		for key in lastGenerated:
+			print "prevpos ", key
 			#here we will look at each prev pos that may preceed the pos of the word we're looking at
 			followingProbabilities = posDict.get(pos).previousPOS
 			#print followingProbabilities
-			probFollowingPrevPos = float(followingProbabilities.get(prevpos))
+			probFollowingPrevPos = float(followingProbabilities.get(key))
 			# print pos
 			# print prevpos
 			print "probFollowingPrevPos ", probFollowingPrevPos
@@ -81,12 +78,14 @@ for word in totalWords:
 		# print totalOccurances
 		print "probPOSISWord ", probPOSIsWord
 		probWordAndFollowing = float(probPOSIsWord * probFollowingPrevPos)
+		probForEachPOSOfWord[pos] = probWordAndFollowing
 
-	#now we have the probability that the POS is the given word times the probability that the POS follows the previous POS
-	#now we want to figure out what that probability is combined with the previous probabilities we've found
+	#now we have the probability for each pos of the word
+	#we will now find 
+	print probForEachPOSOfWord
+	
 
-	tempLastGeneratedPOS = []
-	tempLastGeneratedProb = []
+	tempLastGenerated = {}
 
 
 
