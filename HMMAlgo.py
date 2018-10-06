@@ -78,12 +78,18 @@ for word in totalWords:
 		# print totalOccurances
 		print "probPOSISWord ", probPOSIsWord
 		probWordAndFollowing = float(probPOSIsWord * probFollowingPrevPos)
-		probForEachPOSOfWord[pos] = probWordAndFollowing
 
-	#now we have the probability for each pos of the word
-	#we will now find if we have duplicate probabilities for the same pos
-	#we want to take the maximum prob of the duplicate pos
+		#account for the duplicate probabilities for each pos because of preceeding pos
+		if pos in probForEachPOSOfWord.keys():
+			#this will allow us to make sure that we are keeping the maximum probability for each pos of each word
+			probForEachPOSOfWord[pos] = max(probForEachPOSOfWord[pos], probWordAndFollowing)
+		else:
+			probForEachPOSOfWord[pos] = probWordAndFollowing
+
 	print probForEachPOSOfWord
+	#now we have the probability for each pos of the word
+	
+	
 
 
 	tempLastGenerated = {}
