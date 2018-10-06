@@ -81,9 +81,10 @@ for word in totalWords:
 		probForEachPOSOfWord[pos] = probWordAndFollowing
 
 	#now we have the probability for each pos of the word
-	#we will now find 
+	#we will now find if we have duplicate probabilities for the same pos
+	#we want to take the maximum prob of the duplicate pos
 	print probForEachPOSOfWord
-	
+
 
 	tempLastGenerated = {}
 
