@@ -89,11 +89,13 @@ for word in totalWords:
 			probForEachPOSOfWord[pos] = probWordAndFollowing
 
 	print probForEachPOSOfWord
+	#now need to account for the fact that this word is following the previous pos included in lastGenerated
+	#so we have to multiply these probabilities by those probabilities
+	
+	print "----------------------------------------------------------------------------------------"
 	#now we have the probability for each pos of the word
 	#we need to add those to last generated so the following word can account for these probabilities
 	lastGenerated = probForEachPOSOfWord
-
-	print "----------------------------------------------------------------------------------------"
 	tempLastGenerated = {}
 
 
