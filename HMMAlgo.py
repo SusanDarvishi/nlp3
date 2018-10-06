@@ -48,28 +48,28 @@ A[positionOfStart][0] = 1
 lastGenerated = {"start":1}
 tempLastGenerated = {}
 
-print "----------------------------------------------------------------------------------------"
+#print "----------------------------------------------------------------------------------------"
 
 #look at each word
 for word in totalWords:
-	print "word ", word
+	#print "word ", word
 	#look at all of the parts of speech that can apply to that word
 	probWordAndFollowing = 0.0
 	probForEachPOSOfWord = {}
 	for pos in wordDict.get(word):
-		print "pos ", pos
+		#print "pos ", pos
 
 		#look at the probability that each part of speech follows the previous parts of speech
 		probFollowingPrevPos = 0.0
 		for key in lastGenerated:
-			print "prevpos ", key
+			#print "prevpos ", key
 			#here we will look at each prev pos that may preceed the pos of the word we're looking at
 			followingProbabilities = posDict.get(pos).previousPOS
 			#print followingProbabilities
 			probFollowingPrevPos = float(followingProbabilities.get(key))
 			# print pos
 			# print prevpos
-			print "probFollowingPrevPos ", probFollowingPrevPos
+			#print "probFollowingPrevPos ", probFollowingPrevPos
 		
 		#now we have the probability that the pos we're looking at follows one of the previous pos
 		#now we want to multiply that by the probability that the pos is a given word
@@ -78,7 +78,7 @@ for word in totalWords:
 		probPOSIsWord = float(wordOccurances)/float(totalOccurances)
 		# print wordOccurances
 		# print totalOccurances
-		print "probPOSISWord ", probPOSIsWord
+		#print "probPOSISWord ", probPOSIsWord
 		probWordAndFollowing = float(probPOSIsWord * probFollowingPrevPos)
 
 		#account for the duplicate probabilities for each pos because of preceeding pos
@@ -88,11 +88,27 @@ for word in totalWords:
 		else:
 			probForEachPOSOfWord[pos] = probWordAndFollowing
 
-	print probForEachPOSOfWord
+	print "initial probs ", probForEachPOSOfWord
 	#now need to account for the fact that this word is following the previous pos included in lastGenerated
 	#so we have to multiply these probabilities by those probabilities
-	
-	print "----------------------------------------------------------------------------------------"
+
+	firstIterationOfLoop = True
+	print word
+	for prevpos in lastGenerated.keys():
+		for currentpos in probForEachPOSOfWord.keys():
+			if firstIterationOfLoop:
+				probForEachPOSOfWord[currentpos] = lastGenerated.get(prevpos) * probForEachPOSOfWord.get(currentpos)
+				print "multiplying ", lastGenerated.get(prevpos), " by ", probForEachPOSOfWord.get(currentpos)
+				print "no choice in number kept ", (lastGenerated.get(prevpos) * probForEachPOSOfWord.get(currentpos))
+			else:
+				probForEachPOSOfWord[currentpos] = max(probForEachPOSOfWord.get(currentpos),(lastGenerated.get(prevpos) * probForEachPOSOfWord.get(currentpos)))
+				print "multiplying ", lastGenerated.get(prevpos), " by ", probForEachPOSOfWord.get(currentpos)
+				print "choosing ", max(probForEachPOSOfWord.get(currentpos),(lastGenerated.get(prevpos) * probForEachPOSOfWord.get(currentpos)))
+		firstIterationOfLoop = False	
+
+	print "final probs ", probForEachPOSOfWord
+
+	#print "----------------------------------------------------------------------------------------"
 	#now we have the probability for each pos of the word
 	#we need to add those to last generated so the following word can account for these probabilities
 	lastGenerated = probForEachPOSOfWord
