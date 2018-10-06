@@ -48,6 +48,8 @@ A[positionOfStart][0] = 1
 lastGenerated = {"start":1}
 tempLastGenerated = {}
 
+print "----------------------------------------------------------------------------------------"
+
 #look at each word
 for word in totalWords:
 	print "word ", word
@@ -88,10 +90,10 @@ for word in totalWords:
 
 	print probForEachPOSOfWord
 	#now we have the probability for each pos of the word
-	
-	
+	#we need to add those to last generated so the following word can account for these probabilities
+	lastGenerated = probForEachPOSOfWord
 
-
+	print "----------------------------------------------------------------------------------------"
 	tempLastGenerated = {}
 
 
