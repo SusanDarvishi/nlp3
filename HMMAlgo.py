@@ -88,12 +88,12 @@ for word in totalWords:
 		else:
 			probForEachPOSOfWord[pos] = probWordAndFollowing
 
+	print word
 	print "initial probs ", probForEachPOSOfWord
 	#now need to account for the fact that this word is following the previous pos included in lastGenerated
 	#so we have to multiply these probabilities by those probabilities
 
 	firstIterationOfLoop = True
-	print word
 	for prevpos in lastGenerated.keys():
 		for currentpos in probForEachPOSOfWord.keys():
 			if firstIterationOfLoop:
