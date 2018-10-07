@@ -90,20 +90,23 @@ for word in totalWords:
 
 	print word
 	print "initial probs ", probForEachPOSOfWord
+	#embed()
 	#now need to account for the fact that this word is following the previous pos included in lastGenerated
 	#so we have to multiply these probabilities by those probabilities
 
 	firstIterationOfLoop = True
 	for prevpos in lastGenerated.keys():
 		for currentpos in probForEachPOSOfWord.keys():
+			#embed()
 			if firstIterationOfLoop:
+				print "multiplying ", lastGenerated.get(prevpos), " by ", probForEachPOSOfWord.get(currentpos)
 				probForEachPOSOfWord[currentpos] = lastGenerated.get(prevpos) * probForEachPOSOfWord.get(currentpos)
-				print "multiplying ", lastGenerated.get(prevpos), " by ", probForEachPOSOfWord.get(currentpos)
-				print "no choice in number kept ", (lastGenerated.get(prevpos) * probForEachPOSOfWord.get(currentpos))
+				print "no choice in number kept ", probForEachPOSOfWord.get(currentpos)
 			else:
-				probForEachPOSOfWord[currentpos] = max(probForEachPOSOfWord.get(currentpos),(lastGenerated.get(prevpos) * probForEachPOSOfWord.get(currentpos)))
 				print "multiplying ", lastGenerated.get(prevpos), " by ", probForEachPOSOfWord.get(currentpos)
-				print "choosing ", max(probForEachPOSOfWord.get(currentpos),(lastGenerated.get(prevpos) * probForEachPOSOfWord.get(currentpos)))
+				probForEachPOSOfWord[currentpos] = max(probForEachPOSOfWord.get(currentpos),(lastGenerated.get(prevpos) * probForEachPOSOfWord.get(currentpos)))
+				print "choosing ", max(probForEachPOSOfWord.get(currentpos),probForEachPOSOfWord.get(currentpos))
+		print "currentpos prob ", probForEachPOSOfWord.get(currentpos)
 		firstIterationOfLoop = False	
 
 	print "final probs ", probForEachPOSOfWord
