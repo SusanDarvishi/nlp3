@@ -51,7 +51,6 @@ tempLastGenerated = {}
 #begin by looking at each word
 for word in totalWords:
 
-	probEachPOSFollowingPrev = {}
 	#look at all the pos that can preceed that word
 	for prevpos in lastGenerated.keys():
 
@@ -63,17 +62,21 @@ for word in totalWords:
 				#once we've confirmed, we can begin calculations
 				#first calculate the probability that prevpos preceeds pos -- this is equal to the probability that this pos follows
 				#prevpos times the probability calculated for prevPos
-				probPrevposPreceeds = posDict.get(pos).previousPOS.get(prevpos) * lastGenerated.get(prevpos)
+				probPrevposPreceeds = posDict.get(pos).previousPOS.get(prevpos) * lastGenerated.get(prevpos) * wordDict.get(word).get(pos)
 				
 				#add to dictionary in wider scope
-				if pos in probEachPOSFollowingPrev.keys():
+				if pos in tempLastGenerated.keys():
 					#if that pos is already in that dictionary, we want to take the maximum
-					probEachPOSFollowingPrev[pos] = max(probPrevposPreceeds, probEachPOSFollowingPrev.get(pos))
+					tempLastGenerated[pos] = max(probPrevposPreceeds, tempLastGenerated.get(pos))
 				else:
 					#if not, just add it
-					probEachPOSFollowingPrev[pos] = probPrevposPreceeds
+					tempLastGenerated[pos] = probPrevposPreceeds
 			#else we will not calculate probability because there is no chance that the pos can follow the prevpos
 
+	lastGenerated = tempLastGenerated
+	tempLastGenerated = {}
+	print word
+	print lastGenerated
 
 
 
