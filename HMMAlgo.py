@@ -50,20 +50,25 @@ tempLastGenerated = {}
 
 #begin by looking at each word
 for word in totalWords:
-
+	print "-------------------------------------------------------------------------------------------------------------------"
+	print word
 	#look at all the pos that can preceed that word
 	for prevpos in lastGenerated.keys():
-
+		print "prevpos ", prevpos
 		#now we want to try to find the pos that can apply to word that can also follow prevpos
 		#so we start by going over all the pos that apply to the word
 		for pos in wordDict.get(word).keys():
+			print "pos ", pos
 			#and then we confirm that it is a pos that can follow the previous pos
 			if prevpos in posDict.get(pos).previousPOS.keys():
 				#once we've confirmed, we can begin calculations
 				#first calculate the probability that prevpos preceeds pos -- this is equal to the probability that this pos follows
 				#prevpos times the probability calculated for prevPos
-				probPrevposPreceeds = posDict.get(pos).previousPOS.get(prevpos) * lastGenerated.get(prevpos) * wordDict.get(word).get(pos)
-				
+				probWordIsPOS = float(wordDict.get(word).get(pos))/posDict.get(pos).numOccurances
+				probPrevposPreceeds = posDict.get(pos).previousPOS.get(prevpos) * lastGenerated.get(prevpos) * probWordIsPOS
+				print "probPrevposPreceeds ", probPrevposPreceeds
+				print "posDict.get(pos).previousPOS.get(prevpos) ", posDict.get(pos).previousPOS.get(prevpos)
+				print "probWordIsPOS ", probWordIsPOS
 				#add to dictionary in wider scope
 				if pos in tempLastGenerated.keys():
 					#if that pos is already in that dictionary, we want to take the maximum
@@ -75,7 +80,7 @@ for word in totalWords:
 
 	lastGenerated = tempLastGenerated
 	tempLastGenerated = {}
-	print word
+	#print word
 	print lastGenerated
 
 
