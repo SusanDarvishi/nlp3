@@ -27,18 +27,23 @@ numUniquePOS = len(totalPOS)
 
 
 #this array will hold the proabilities and is nxm where n is num unique words and m is num pos
-A = [[None for y in range(numUniqueWords)] for x in range(numUniquePOS)]
+A = {}
+
+for pos in totalPOS:
+	A[pos] = [None for x in range(numUniqueWords+2)]
 #this array will be the backtracking trace, it will be the same size as A and will hold in each position the location of the position that should precede it
-B = [[None for y in range(numUniqueWords)] for x in range(numUniquePOS)]
+B = {}
+
+for pos in totalPOS:
+    B[pos] = [None for x in range(numUniqueWords+2)]
 
 
 #want to set the first column probabilities to 0 except the probability for start because there is a 100% chance that start is at the beginning
 #of the sentence and a 0% chance that anything besides start begins a sentence
-for i in range(numUniquePOS):
-	A[i][0] = 0
+for pos in totalPOS:
+	A[pos][0] = 0
 
-positionOfStart = totalPOS.index("start")
-A[positionOfStart][0] = 1
+A["start"][0] = 1
 
 #embed()
 
@@ -80,11 +85,16 @@ for word in totalWords:
 
 	lastGenerated = tempLastGenerated
 	tempLastGenerated = {}
-	#print word
+	
 	print lastGenerated
 
+	#at the end of these for loops we have the probability that each pos applies to each word
+	#now we need to add those probabilities to the final array A
+	for key in lastGenerated:
+		#for each pos that we've calculated we need to add that probability to array A at position totalWords.index(word)
+		 A[key][totalWords.index(word)+1] = lastGenerated.get(key)
 
-
+	print A
 
 
 
