@@ -52,6 +52,7 @@ A["start"][0] = 1
 
 lastGenerated = {"start":1}
 tempLastGenerated = {}
+numWordsLookedAt = 0
 
 #begin by looking at each word
 for word in totalWords:
@@ -88,13 +89,56 @@ for word in totalWords:
 	
 	print lastGenerated
 
-	#at the end of these for loops we have the probability that each pos applies to each word
+	#increment the number of words we've addressed at the end of the word for loop
+	numWordsLookedAt += 1
+
+	#we have the probability that each pos applies to each word
 	#now we need to add those probabilities to the final array A
 	for key in lastGenerated:
 		#for each pos that we've calculated we need to add that probability to array A at position totalWords.index(word)
 		 A[key][totalWords.index(word)+1] = lastGenerated.get(key)
 
-	print A
+	#if we have addressed all of the unique words, we need to fill out the space for the "end" pos in A
+	if numWordsLookedAt == numUniqueWords:
+		#first find the pos in last generated with the highest probability
+		maxPrevProb = 0
+		posWithHighestProb = ""
+		for key in lastGenerated:
+			if lastGenerated.get(key) > maxPrevProb:
+				maxPrevProb = lastGenerated.get(key)
+				posWithHighestProb = key
+
+		print "posWithHighestProb", posWithHighestProb
+		print maxPrevProb
+
+		#now calculate the probability that end follows that pos
+		probWordPreceedsEnd =  posDict.get("end").previousPOS.get(posWithHighestProb)
+		print probWordPreceedsEnd
+		#and add it to A
+		A["end"][numWordsLookedAt+1] = maxPrevProb * probWordPreceedsEnd
+
+print A
+
+#at this point array A is filled out and we have the correct probabilities for each word/pos combo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
