@@ -56,15 +56,11 @@ numWordsLookedAt = 0
 
 #begin by looking at each word
 for word in totalWords:
-	print "-------------------------------------------------------------------------------------------------------------------"
-	print word
 	#look at all the pos that can preceed that word
 	for prevpos in lastGenerated.keys():
-		print "prevpos ", prevpos
 		#now we want to try to find the pos that can apply to word that can also follow prevpos
 		#so we start by going over all the pos that apply to the word
 		for pos in wordDict.get(word).keys():
-			print "pos ", pos
 			#and then we confirm that it is a pos that can follow the previous pos
 			if prevpos in posDict.get(pos).previousPOS.keys():
 				#once we've confirmed, we can begin calculations
@@ -72,9 +68,6 @@ for word in totalWords:
 				#prevpos times the probability calculated for prevPos
 				probWordIsPOS = float(wordDict.get(word).get(pos))/posDict.get(pos).numOccurances
 				probPrevposPreceeds = posDict.get(pos).previousPOS.get(prevpos) * lastGenerated.get(prevpos) * probWordIsPOS
-				print "probPrevposPreceeds ", probPrevposPreceeds
-				print "posDict.get(pos).previousPOS.get(prevpos) ", posDict.get(pos).previousPOS.get(prevpos)
-				print "probWordIsPOS ", probWordIsPOS
 				#add to dictionary in wider scope
 				if pos in tempLastGenerated.keys():
 					#if that pos is already in that dictionary, we want to take the maximum
@@ -86,8 +79,6 @@ for word in totalWords:
 
 	lastGenerated = tempLastGenerated
 	tempLastGenerated = {}
-	
-	print lastGenerated
 
 	#increment the number of words we've addressed at the end of the word for loop
 	numWordsLookedAt += 1
@@ -108,41 +99,28 @@ for word in totalWords:
 				maxPrevProb = lastGenerated.get(key)
 				posWithHighestProb = key
 
-		print "posWithHighestProb", posWithHighestProb
-		print maxPrevProb
-
 		#now calculate the probability that end follows that pos
 		probWordPreceedsEnd =  posDict.get("end").previousPOS.get(posWithHighestProb)
-		print probWordPreceedsEnd
 		#and add it to A
 		A["end"][numWordsLookedAt+1] = maxPrevProb * probWordPreceedsEnd
 
-print A
-
 #at this point array A is filled out and we have the correct probabilities for each word/pos combo
+finalDict = {}
+#so for each word we have
+for word in totalWords:
+	indexOfWord = totalWords.index(word)+1
+	#we want to look at the probability that it can be each pos
+	maxProb = 0
+	associatedPOS = ""
+	for pos in totalPOS:
+		#so we want to search A and find the pos that the word is most likely to be
+		#therefore we search through all the pos at the index of the word so that we can look at the prob of the word being that pos
+		probAtCurrentPOS = A[pos][indexOfWord]
 
+		#find the pos with the max probability
+		if probAtCurrentPOS > maxProb:
+			maxProb = probAtCurrentPOS
+			associatedPOS = pos
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	#once we have the pos that this word is most likely to be, we add it to the final dictionary so that these pairings can be used for tagging
+	finalDict[word] = associatedPOS
