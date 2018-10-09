@@ -14,7 +14,7 @@ wordDict = {}
 totalWords = []
 totalPOS = []
 
-filepath = 'smallertestfile.pos'  
+filepath = 'WSJ_24.pos'  
 with open(filepath) as fp:
 
     #begin by saying that the first pos is start
@@ -66,6 +66,7 @@ with open(filepath) as fp:
                     totalPOS.append(pos)
                 #if we have seen at least one word as this pos before (ie is already in posDict)
                 elif pos in posDict.keys():
+                    posDict.get(pos).numOccurances = posDict.get(pos).numOccurances + 1
                     #if this is the first time this pos is following prevPOS
                     if prevPOS not in posDict.get(pos).previousPOS.keys():
                         #add prevPOS to the previousPOS dictionary with an occurance of 1
@@ -82,22 +83,25 @@ with open(filepath) as fp:
         else:
             #conditionwhen we're looking at a newline character aka a new sentence
             #so we need to first increment number of times that end appears and record the pos that preceeds it
+            posDict.get("end").numOccurances = posDict.get("end").numOccurances + 1
             if prevPOS not in posDict.get("end").previousPOS.keys():
                 #add prevPOS to the previousPOS dictionary with an occurance of 1
                 posDict.get("end").previousPOS[prevPOS] = 1
             #if this is not the first time this pos is following prevPOS
             elif prevPOS in posDict.get("end").previousPOS.keys():
                 oldNumOccurrences = posDict.get("end").previousPOS.get(prevPOS)
-                posDict.get(pos).previousPOS[prevPOS] = oldNumOccurrences + 1
+                posDict.get("end").previousPOS[prevPOS] = oldNumOccurrences + 1
             else:
                 print("error: for some reason not hitting either if statement when parsing pos's previouspos")
 
         #set the prevPOS for the next word that we encounter
         prevPOS = pos
 
-    print ("WORDDICT ------------------------------------------------------------------")
+    print ("WORDDICT ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
     print (wordDict)
 
-    print("POSDICT ------------------------------------------------------------------")
+    print
+
+    print("POSDICT ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
     for key in posDict.keys():
         print(key, posDict.get(key).numOccurances, posDict.get(key).previousPOS)
